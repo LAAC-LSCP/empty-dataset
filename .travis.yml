@@ -1,0 +1,10 @@
+language: python
+python:
+  - "3.5"
+  - "3.6"
+  - "3.7"
+  - "3.8"
+install:
+  - pip install git+https://github.com/LAAC-LSCP/ChildRecordsData.git
+script:
+  - child-project validate --source . --ignore-files
