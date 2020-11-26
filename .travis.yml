@@ -6,5 +6,7 @@ python:
   - "3.8"
 install:
   - pip install git+https://github.com/LAAC-LSCP/ChildRecordsData.git
+  - wget https://raw.githubusercontent.com/LAAC-LSCP/empty-dataset/master/check_dataset.py
 script:
-  - child-project validate --source . --ignore-files
+  - python check_dataset.py
+  - child-project validate . --ignore-files
