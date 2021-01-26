@@ -44,6 +44,8 @@ with zipfile.ZipFile("master.zip") as zip_file:
 
 os.remove("master.zip")
 
+open('.datalad/path', 'w+').write(os.path.join('/scratch1/data/laac_data/', os.path.basename(ds.path))
+
 # commit everything
 repo = Repo(sys.argv[1])
 repo.git.add('*')
@@ -62,6 +64,6 @@ datalad.api.create_sibling_github(
 datalad.api.create_sibling(
     name = 'cluster',
     dataset = ds,
-    target_url = os.path.join('/scratch1/data/laac_data/', os.path.basename(ds.path)),
+    target_url = open('.datalad/path', 'r').read(),
     publish_depends = 'origin'
 )
