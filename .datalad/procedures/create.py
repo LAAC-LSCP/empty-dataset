@@ -60,10 +60,15 @@ datalad.api.create_sibling_github(
     access_protocol = 'ssh'
 )
 
+
+url = open(os.path.join(sys.argv[1], '.datalad/path')).read().strip()
+if len(sys.argv) > 2:
+    url = "{}:{}".format(sys.argv[2], url)
+
 # create oberon sibling
 datalad.api.create_sibling(
     name = 'cluster',
     dataset = ds,
-    target_url = open('.datalad/path', 'r').read(),
+    target_url = url,
     publish_depends = 'origin'
 )
