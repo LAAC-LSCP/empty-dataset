@@ -60,15 +60,23 @@ datalad.api.create_sibling_github(
     access_protocol = 'ssh'
 )
 
-
 url = open(os.path.join(sys.argv[1], '.datalad/path')).read().strip()
 if len(sys.argv) > 2:
     url = "{}:{}".format(sys.argv[2], url)
 
-# create oberon sibling
+# create the cluster sibling
 datalad.api.create_sibling(
     name = 'cluster',
+    as_common_datasrc = 'cluster',
     dataset = ds,
     target_url = url,
     publish_depends = 'origin'
+)
+
+# everything pushed to github should also be pushed to the cluster
+datalad.api.siblings(
+    dataset = ds,
+    action = 'configure',
+    name = 'github',
+    publish_depends = 'cluster'
 )
