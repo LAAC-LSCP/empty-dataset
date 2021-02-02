@@ -67,8 +67,8 @@ if len(sys.argv) > 2:
 # create the cluster sibling
 datalad.api.create_sibling(
     name = 'cluster',
-    as_common_datasrc = 'cluster',
     dataset = ds,
     target_url = url,
-    publish_depends = 'origin'
+    publish_depends = 'origin',
+    annex_wanted = 'include=*'
 )
