@@ -23,10 +23,3 @@ datalad.api.siblings(
     publish_depends = 'origin',
     url = url
 )
-
-datalad.api.siblings(
-    dataset = ds,
-    action = 'configure',
-    name = 'github',
-    publish_depends = 'cluster'
-)

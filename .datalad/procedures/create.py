@@ -72,11 +72,3 @@ datalad.api.create_sibling(
     target_url = url,
     publish_depends = 'origin'
 )
-
-# everything pushed to github should also be pushed to the cluster
-datalad.api.siblings(
-    dataset = ds,
-    action = 'configure',
-    name = 'github',
-    publish_depends = 'cluster'
-)
