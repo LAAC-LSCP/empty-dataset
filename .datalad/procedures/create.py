@@ -44,12 +44,24 @@ with zipfile.ZipFile("master.zip") as zip_file:
 
 os.remove("master.zip")
 
-open('.datalad/path', 'w+').write(os.path.join('/scratch1/data/laac_data/', os.path.basename(ds.path))
+open('.datalad/path', 'w+').write(os.path.join('/scratch1/data/laac_data/', os.path.basename(ds.path)))
 
 # commit everything
 repo = Repo(sys.argv[1])
 repo.git.add('*')
 repo.git.commit(m = "initial commit")
+
+url = open(os.path.join(sys.argv[1], '.datalad/path')).read().strip()
+if len(sys.argv) > 2:
+    url = "ssh://{}{}".format(sys.argv[2], url)
+
+# create the cluster sibling
+datalad.api.create_sibling(
+    name = 'cluster',
+    dataset = ds,
+    sshurl = url,
+    annex_wanted = 'include=*'
+)
 
 # create github sibling
 datalad.api.create_sibling_github(
@@ -57,18 +69,10 @@ datalad.api.create_sibling_github(
     reponame = os.path.basename(ds.path),
     dataset = ds,
     github_organization = 'LAAC-LSCP',
-    access_protocol = 'ssh'
+    access_protocol = 'ssh',
+    private = True,
+    publish_depends = 'cluster'
 )
 
-url = open(os.path.join(sys.argv[1], '.datalad/path')).read().strip()
-if len(sys.argv) > 2:
-    url = "{}:{}".format(sys.argv[2], url)
-
-# create the cluster sibling
-datalad.api.create_sibling(
-    name = 'cluster',
-    dataset = ds,
-    target_url = url,
-    publish_depends = 'origin',
-    annex_wanted = 'include=*'
-)
+datalad.api.push(dataset = ds, to = 'origin')
+repo.heads.master.set_tracking_branch(repo.remotes.origin.refs.master)
