@@ -17,7 +17,7 @@ ds = require_dataset(
 )
 
 # remove files to be replaced
-os.remove(".gitattributes")
+os.remove(os.path.join(sys.argv[1], ".gitattributes"))
 
 # download empty-dataset template
 res = requests.get("https://github.com/LAAC-LSCP/empty-dataset/archive/master.zip")
@@ -44,7 +44,7 @@ with zipfile.ZipFile("master.zip") as zip_file:
 
 os.remove("master.zip")
 
-open('.datalad/path', 'w+').write(os.path.join('/scratch1/data/laac_data/', os.path.basename(ds.path)))
+open(os.path.join(sys.argv[1], '.datalad/path'), 'w+').write(os.path.join('/scratch1/data/laac_data/', os.path.basename(ds.path)))
 
 # commit everything
 repo = Repo(sys.argv[1])
@@ -52,8 +52,8 @@ repo.git.add('*')
 repo.git.commit(m = "initial commit")
 
 url = open(os.path.join(sys.argv[1], '.datalad/path')).read().strip()
-if len(sys.argv) > 2:
-    url = "ssh://{}{}".format(sys.argv[2], url)
+if os.getenv('OBERON_ALIAS'):
+    url = "ssh://{}{}".format(os.getenv('OBERON_ALIAS'), url)
 
 # create the cluster sibling
 datalad.api.create_sibling(
