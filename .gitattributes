@@ -4,4 +4,4 @@
 scripts/* annex.largefiles=nothing
 ci/* annex.largefiles=nothing
 metadata/* annex.largefiles=nothing
-converted_recordings/* annex.largefiles=((mimeencoding=binary)and(largerthan=0))
+recordings/* annex.largefiles=((mimeencoding=binary)and(largerthan=0))
